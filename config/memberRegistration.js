@@ -1,4 +1,4 @@
-const Member = require('../models/memberModel')
+const Member = require('../Backend/models/memberModel')
 const {nanoid} = require('nanoid')
 
 async function addMembersToDB(memberEmails) {
