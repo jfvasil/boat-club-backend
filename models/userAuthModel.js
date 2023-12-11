@@ -22,6 +22,12 @@ const userSchema = new mongoose.Schema({
   },
   refreshToken: {
     type: String
+  }, 
+  resetCode: {
+    type: String
+  }, 
+  codeExpiration: {
+    type: Date
   }
 })
 
@@ -44,3 +50,4 @@ userSchema.pre('save', function(next) {
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
+
