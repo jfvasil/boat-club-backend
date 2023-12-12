@@ -29,11 +29,11 @@ const signupAuth = async (req, res) => {
 const login = async (req, res) => {
 const {email,password} = req.body
 if(!email || !password){
-  return res.status(400).json({'message': "Email and password are required"})
+  return res.status(400).json({error: "Email and password are required"})
 }
 const foundUser = await User.findOne({email})
 if(!foundUser || !foundUser.validPassword(password)){
-  return res.SendStatus(401)
+  return res.sendStatus(401)
 } 
 // if(foundUser.validPassword(password) === password){
   const accessToken = jwt.sign(
@@ -57,9 +57,9 @@ if(!foundUser || !foundUser.validPassword(password)){
 
     //create cookie 
     res.cookie('jwt', refreshToken,{ httpOnly: true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 })
-   
+   const role = foundUser.role
     //send access token
-  res.json({accessToken})
+  res.json({accessToken ,role})
 }
 // }else{
 //   res.sendStatus(401)
@@ -77,19 +77,21 @@ const logout = async (req, res) => {
     return res.sendStatus(204)
   } 
   const refreshToken = cookies.jwt
+  console.log(refreshToken)
 //checking for refresh token
   const foundUser = await User.findOne({refreshToken}).exec()
   if(!foundUser){
     res.clearCookie('jwt', {httpOnly: true, sameSite: 'None', secure: true})
     return res.sendStatus(204)
-  }
+  } else{
   //delete the refresh token
-  foundUser.refreshToken = foundUser.refreshToken.filter(rt => rt !== refreshToken)
+  foundUser.refreshToken = ''
   const result = await foundUser.save()
-  console.log(result)
+  
 
   res.clearCookie('jwt', {httpOnly: true, sameSite: 'None', secure: true})
   res.sendStatus(204)
+  }
 }
 
 module.exports = {signupAuth, login, logout}
