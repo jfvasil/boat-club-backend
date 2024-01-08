@@ -5,6 +5,7 @@ const whitelist = [
     'http://localhost:3000',
     'http://localhost:3001',
     'https://wickaboagboatclub.netlify.app',
+    'https://lakewickaboagboatclub.com/'
 
     
 ];
